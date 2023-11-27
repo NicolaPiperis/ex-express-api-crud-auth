@@ -7,6 +7,7 @@ const RouteNotFound = require(".//middleware/routeNotFound");
 const port = 3000;
 const app = express();
 
+const usersRouter = require("./routers/auth");
 const postsRouter = require("./routers/posts");
 const tagsRouter = require("./routers/tag");
 const categoriesRouter = require("./routers/category");
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use("/tags", tagsRouter);
 app.use("/categories", categoriesRouter);
+app.use("", usersRouter);
 app.use("/posts", postsRouter);
 
 app.use(RouteNotFound);
