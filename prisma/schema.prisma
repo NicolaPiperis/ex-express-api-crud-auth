@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  title      String?   @db.VarChar(100)
+  slug       String    @unique @db.VarChar(100)
+  image      String    @db.Text
+  content    String    @db.Text
+  published  Boolean   @default(true)
+  // In questo ordine, definiamo il categoryId all'interno di Post che prenderà il suo id in relazione a il suo id nel model Category
+  // RELAZIONE 1 TO * una category ha più post ed un post ha una sola category
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  // * to * | un post puo avere piu tag
+  tags       Tag[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("posts")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  // una category ha piu post
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(100)
+  // * to * | un tag ha piu post
+  posts Post[]
+}
