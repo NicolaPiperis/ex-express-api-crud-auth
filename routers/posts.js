@@ -2,6 +2,7 @@ const express = require ("express");
 const router = express.Router();
 
 const {body} = require('express-validator');
+const authHandler = require("../middleware/authHandler");
 
 const postsController = require("../controllers/posts");
 
@@ -19,9 +20,9 @@ router.get('/:slug', postsController.show);
 router.get('/', postsController.showByFilter);
 
 // PUT /posts/:slug
-router.put('/:slug', postsController.update);
+router.put('/:slug', authHandler, postsController.update);
 
 // DELETE /posts/:slug
-router.delete('/:slug', postsController.destroy);
+router.delete('/:slug', authHandler, postsController.destroy);
 
 module.exports = router;
